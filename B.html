@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invitation mariage · Familles NJI NAFON & NJI GAVOM</title>
+  <!-- Google Fonts & Font Awesome 6 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      background: #fcf5ed;
+      font-family: 'Montserrat', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      background-image: url('https://images.unsplash.com/photo-1523694576729-7a22a1e23d9e?q=80&w=2070&auto=format&fit=crop');
+      background-size: cover;
+      background-attachment: fixed;
+      background-blend-mode: soft-light;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* ===== ENVELOPPE RÉALISTE FERMÉE ===== */
+    .envelope {
+      width: 580px;
+      height: 570px;
+      background: #f3e7db;
+      border-radius: 20px 20px 12px 12px;
+      box-shadow: 0 30px 40px -15px rgba(70, 40, 20, 0.5);
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 2px solid #dbbd9c;
+      overflow: hidden;
+    }
+
+    /* Image de fond de l'enveloppe (vraie enveloppe) */
+    .envelope-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.9;
+      z-index: 1;
+    }
+
+    /* Rabat simulé par un pseudo-élément */
+    .envelope::after {
+      content: '';
+      position: absolute;
+      top: -25px;
+      left: 0;
+      width: 100%;
+      height: 60px;
+      background: #e8d2bc;
+      transform: skewY(-3deg);
+      border-radius: 20px 20px 0 0;
+      box-shadow: 0 -5px 10px rgba(0,0,0,0.15);
+      border-bottom: 2px solid #c9a77d;
+      z-index: 2;
+    }
+
+    /* Photo des mariés sur l'enveloppe (médaillon) */
+    .envelope-photo {
+      position: absolute;
+      top: 2px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid #fae8d9;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      z-index: 9;
+    }
+
+    /* Contenu textuel sur l'enveloppe */
+    .envelope-text {
+      position: absolute;
+      bottom: 30px;
+      left: 10px;
+      right: 10px;
+      text-align: center;
+      color: #2f1f12;
+      background: rgba(255, 245, 235, 0.8);
+      backdrop-filter: blur(2px);
+      padding: 0.3rem 0.7rem;
+      margin: 0 15px;
+      border-radius: 50px;
+      border: 1px solid #dbbd9c;
+      z-index: 6;
+    }
+
+    .arabic {
+      font-family: 'Arial', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 500;
+      color: #633e1c;
+      direction: rtl;
+    }
+
+    .french {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #4f351e;
+      border-top: 1px solid #c9a77d;
+      padding-top: 0.3rem;
+      margin-top: 0.2rem;
+    }
+
+    .open-btn {
+      background: #dbbd9c;
+      border: none;
+      color: #3a281a;
+      font-size: 1.1rem;
+      padding: 0.2rem 1.8rem;
+      border-radius: 40px;
+      margin-top: 0.5rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+      border: 1px solid #b28b60;
+      z-index: 7;
+      position: absolute;
+      bottom: 2px;
+      left: 50%;
+      transform: translateX(-50%);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .open-btn:hover {
+      background: #c9a77d;
+      color: white;
+    }
+
+    .envelope:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 35px 50px -15px #7b5a3e;
+    }
+    .floating-hearts {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+  overflow: hidden;
+}
+
+.floating-hearts i, .floating-hearts span {
+  position: absolute;
+  display: block;
+  color: rgba(210, 120, 80, 0.6);
+  font-size: 1.5rem;
+  animation: float 15s infinite linear;
+  user-select: none;
+}
+
+.floating-hearts i:nth-child(1) { left: 10%; animation-delay: 0s; font-size: 2rem; color: #e6a5a5; }
+.floating-hearts i:nth-child(2) { left: 20%; animation-delay: 2s; font-size: 1.8rem; color: #f4c3a2; }
+.floating-hearts i:nth-child(3) { left: 30%; animation-delay: 4s; font-size: 2.2rem; color: #d88e8e; }
+.floating-hearts i:nth-child(4) { left: 40%; animation-delay: 6s; font-size: 1.6rem; color: #eab9b9; }
+.floating-hearts i:nth-child(5) { left: 50%; animation-delay: 8s; font-size: 2rem; color: #f5b895; }
+.floating-hearts i:nth-child(6) { left: 60%; animation-delay: 10s; font-size: 2.4rem; color: #ddafaf; }
+.floating-hearts i:nth-child(7) { left: 70%; animation-delay: 1s; font-size: 1.7rem; color: #e5b082; }
+.floating-hearts i:nth-child(8) { left: 80%; animation-delay: 3s; font-size: 2.1rem; color: #c28181; }
+.floating-hearts i:nth-child(9) { left: 90%; animation-delay: 5s; font-size: 1.9rem; color: #f0abab; }
+.floating-hearts i:nth-child(10) { left: 15%; animation-delay: 7s; font-size: 2.3rem; color: #e6b3a2; }
+
+@keyframes float {
+  0% { top: -10%; transform: translateX(0) rotate(0deg); opacity: 0.8; }
+  100% { top: 110%; transform: translateX(20px) rotate(360deg); opacity: 0; }
+}
+
+    /* ===== INVITATION (CARTE PRINCIPALE) ===== */
+    .invitation {
+      background: rgba(255, 250, 245, 0.98);
+      backdrop-filter: blur(8px);
+      width: 100%;
+      max-width: 800px;
+      border-radius: 60px 60px 40px 40px;
+      padding: 2.2rem;
+      box-shadow: 0 45px 65px -25px #3f2e1f, 0 0 0 2px #f7e6d6 inset;
+      border: 1px solid #ebd1ba;
+      transition: opacity 0.5s, transform 0.5s;
+      background-image: url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=2070&auto=format&fit=crop');
+      background-size: cover;
+      background-blend-mode: overlay;
+    }
+
+    .invitation.hidden {
+      display: none;
+    }
+
+    /* Grande photo des mariés */
+    .couple-photo {
+      width: 100%;
+      max-height: 320px;
+      object-fit: cover;
+      border-radius: 40px 40px 20px 20px;
+      margin-bottom: 2rem;
+      box-shadow: 0 20px 25px -10px #a97c5a;
+      border: 5px solid #fae8d9;
+    }
+
+    /* Texte d'invitation long et soutenu */
+    .invitation-text {
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .family {
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: #7a583a;
+      margin-bottom: 1rem;
+      letter-spacing: 1px;
+    }
+
+    .invite-p1 {
+      font-size: 1.3rem;
+      font-weight: 500;
+      color: #5a3f28;
+      margin: 1.2rem 0 0.5rem;
+      line-height: 1.6;
+    }
+
+    .invite-p2 {
+      font-size: 1.3rem;
+      font-weight: 500;
+      color: #5a3f28;
+      margin-bottom: 1rem;
+      font-style: italic;
+    }
+
+    .names {
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: #4f2f16;
+      line-height: 1.3;
+      margin: 0.8rem 0;
+    }
+
+    .names strong {
+      font-weight: 900;
+    }
+
+    .date {
+      font-size: 1.8rem;
+      color: #9e6f44;
+      margin: 1.5rem 0 0.5rem;
+      font-weight: 600;
+    }
+
+    .location {
+      font-size: 1.5rem;
+      color: #9e6f44;
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+      background: rgba(245, 225, 210, 0.7);
+      display: inline-block;
+      padding: 0.5rem 2rem;
+      border-radius: 60px;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      justify-content: center;
+      margin: 2rem 0 1rem;
+    }
+
+    .btn {
+      background: transparent;
+      border: 2px solid #dbaa7a;
+      color: #5c3c23;
+      font-weight: 500;
+      font-size: 1.2rem;
+      padding: 0.9rem 2.5rem;
+      border-radius: 60px;
+      cursor: pointer;
+      transition: 0.25s;
+      letter-spacing: 0.5px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: rgba(255, 245, 235, 0.5);
+    }
+
+    .btn i {
+      font-size: 1.4rem;
+      color: #b4753e;
+    }
+
+    .btn:hover {
+      background: #dbaa7a;
+      color: white;
+      border-color: #dbaa7a;
+      box-shadow: 0 8px 16px -6px #af7b4c;
+    }
+
+    .btn:hover i {
+      color: white;
+    }
+
+    /* ===== PROGRAMME ===== */
+    .program {
+      background: rgba(252, 242, 232, 0.98);
+      backdrop-filter: blur(4px);
+      border-radius: 50px;
+      padding: 2rem 1.8rem;
+      border: 2px solid #e7cfb8;
+      width: 100%;
+      max-width: 800px;
+    }
+
+    .program.hidden {
+      display: none;
+    }
+
+    .program h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      color: #674a30;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      border-bottom: 3px solid #e5c7a6;
+      display: inline-block;
+      padding-bottom: 0.3rem;
+    }
+
+    .part {
+      margin: 2rem 0;
+    }
+
+    .part h3 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #9e6f44;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: #f2dfcf;
+      padding: 0.5rem 1.8rem;
+      border-radius: 50px;
+      margin-bottom: 1.2rem;
+    }
+
+    .event-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .event-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: #fffaf4;
+      padding: 0.8rem 1.5rem;
+      border-radius: 80px;
+      border-left: 6px solid #d6a175;
+    }
+
+    .event-time {
+      font-weight: 600;
+      color: #7b532f;
+      min-width: 100px;
+      font-size: 1.1rem;
+    }
+
+    .event-desc {
+      font-weight: 400;
+      color: #3f2f1e;
+      flex: 1;
+      font-size: 1.1rem;
+    }
+
+    .event-desc strong {
+      color: #b2562a;
+    }
+
+    /* Thème vestimentaire */
+    .theme {
+      background: #f7e3d3;
+      border-radius: 50px;
+      padding: 1.2rem 1.8rem;
+      margin: 2rem 0 1.5rem;
+      text-align: center;
+      border: 2px solid #d6a175;
+    }
+
+    .theme p {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #5c3c23;
+    }
+
+    .theme span {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #a5652e;
+      margin: 0 0.3rem;
+    }
+
+    .theme .note {
+      font-size: 1.1rem;
+      margin-top: 0.5rem;
+    }
+
+    /* Bouton WhatsApp */
+    .whatsapp-btn {
+      background: #25D366;
+      border: none;
+      color: white;
+      font-size: 1.2rem;
+      padding: 1rem 2rem;
+      border-radius: 60px;
+      cursor: pointer;
+      transition: 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      border: 2px solid #1da85c;
+      margin: 1rem 0;
+    }
+
+    .whatsapp-btn:hover {
+      background: #1da85c;
+    }
+
+    .whatsapp-btn i {
+      font-size: 1.8rem;
+    }
+
+    .back-btn {
+      background: #dbbd9c;
+      border: none;
+      color: #3a281a;
+      font-size: 1.1rem;
+      padding: 0.8rem 2rem;
+      border-radius: 40px;
+      cursor: pointer;
+      margin-top: 1rem;
+      border: 1px solid #b28b60;
+    }
+
+    .back-btn:hover {
+      background: #c9a77d;
+      color: white;
+    }
+
+    @media (max-width: 600px) {
+      .names { font-size: 2.2rem; }
+      .family { font-size: 1.6rem; }
+      .invite-p1, .invite-p2 { font-size: 1.1rem; }
+      .event-item { flex-wrap: wrap; }
+      .envelope { width: 320px; height: 240px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- ENVELOPPE RÉALISTE -->
+    <div id="envelope" class="envelope">
+      <img class="envelope-bg" src="d.png" alt="Enveloppe">
+      <img class="envelope-photo" src="a.png" alt="Mariés">
+      <div class="envelope-text">
+        <div class="arabic">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+        <div class="french">Au nom d'Allah, le Tout Miséricordieux, le Très Miséricordieux</div>
+      </div>
+      <button class="open-btn" id="openEnvelopeBtn">Ouvrir</button>
+    </div>
+    <audio id="wedding-audio" preload="auto" loop>
+  <source src="mariage.mp3" type="audio/mpeg">
+  Votre navigateur ne supporte pas l'audio.
+</audio>
+<div class="floating-hearts">
+  <i class="fas fa-heart"></i>
+  <i class="fas fa-heart"></i>
+  <i class="fas fa-heart"></i>
+  <i class="fas fa-heart"></i>
+  <i class="fas fa-heart"></i>
+  <span>🌹</span>
+  <span>🌺</span>
+  <span>💐</span>
+  <span>🌸</span>
+  <span>🌷</span>
+</div>
+
+
+    <!-- INVITATION (carte principale) -->
+    <div id="invitation" class="invitation hidden">
+      <img class="couple-photo" src="b.jpg" alt="Mariés">
+
+      <div class="invitation-text">
+        <div class="family">Familles NAH MFON ET NJI GAVOM</div>
+        <p class="invite-p1">Par la grâce d’Allah, le Tout Miséricordieux, le Très Miséricordieux, nous avons l’immense joie et le profond honneur de vous convier à célébrer l’union bénie de nos enfants.</p>
+        <div class="names"><strong>Me MFOPOU</strong>  &  <strong>Mme RABIYA</strong></div>
+        <div class="date">les 21 et 22 Mars 2026</div>
+        <div class="location">Bangambi-Foumban</div>
+        <p class="invite-p2">Que votre présence illumine ce jour de bonheur et de bénédictions, et que nos cœurs s’unissent dans l’amour et la paix.</p>
+        
+      </div>
+
+      <!-- Bouton Programme (seul) -->
+      <div class="buttons">
+        <button id="programBtn" class="btn"><i class="fas fa-scroll"></i> Programme</button>
+      </div>
+    </div>
+
+    <!-- PROGRAMME (caché initialement) -->
+    <div id="program" class="program hidden">
+      <h2>🎊 Déroulement des festivités 🎊</h2>
+      
+      <!-- Samedi 21 Mars -->
+      <div class="part">
+        <h3><i class="fas fa-sun"></i> Samedi 21 Mars</h3>
+        <div class="event-list">
+          <div class="event-item"><span class="event-time">10h00</span><span class="event-desc"><strong>Yaplalé / Vernissage</strong> – domicile du Marié (Njimbout/Toukouop 1)</span></div>
+          <div class="event-item"><span class="event-time">15h00</span><span class="event-desc"><strong>Yaplalé / Vernissage</strong> – domicile de la Mariée (Njimbout/Toukouop 2)</span></div>
+          <div class="event-item"><span class="event-time">19h00</span><span class="event-desc"><strong>« Bride to Be »</strong> – instant privilégié</span></div>
+          <div class="event-item"><span class="event-time">20h00</span><span class="event-desc"><strong>Soirée de Gala</strong> – domicile de la Mariée</span></div>
+        </div>
+      </div>
+      
+      <!-- Dimanche 22 Mars -->
+      <div class="part">
+        <h3><i class="fas fa-moon"></i> Dimanche 22 Mars</h3>
+        <div class="event-list">
+          <div class="event-item"><span class="event-time">07h30</span><span class="event-desc"><strong>Grand Classico ⚽</strong> – Barça (Marié) vs Real (Mariée) – stade de Njimbout</span></div>
+          <div class="event-item"><span class="event-time">10h00</span><span class="event-desc"><strong>Rituel du couscous sacré</strong> – domicile du Marié</span></div>
+          <div class="event-item"><span class="event-time">14h00</span><span class="event-desc"><strong>Kutlam / mariage religieux</strong> – domicile de la Mariée</span></div>
+          <div class="event-item"><span class="event-time">16h00</span><span class="event-desc"><strong>Mariage Civil</strong> – Foyer communautaire de Njimbout</span></div>
+          <div class="event-item"><span class="event-time">20h00</span><span class="event-desc"><strong>Grande Soirée Islamique</strong> – Foyer communautaire</span></div>
+        </div>
+      </div>
+
+      <!-- Thème vestimentaire -->
+      <div class="theme">
+        <p>✨ <strong>Thème de la soirée :</strong> ✨</p>
+        <p><span>Blanc</span> pour les messieurs</p>
+        <p><span>Jaune or</span> et <span>foulard blanc</span> pour les dames</p>
+      </div>
+
+      <!-- Bouton WhatsApp pour confirmer -->
+      <div style="text-align: center;">
+        <button id="confirmBtn" class="whatsapp-btn"><i class="fab fa-whatsapp"></i> Confirmer ma présence</button>
+      </div>
+
+      <!-- Bouton retour à l'invitation -->
+      <div style="text-align: center;">
+        <button id="backToInvitationBtn" class="back-btn"><i class="fas fa-arrow-left"></i> Retour à l'invitation</button>
+      </div>
+    </div>
+  </div>
+
+ <script>
+(function() {
+  const envelope = document.getElementById('envelope');
+  const invitation = document.getElementById('invitation');
+  const program = document.getElementById('program');
+  const openBtn = document.getElementById('openEnvelopeBtn');
+  const programBtn = document.getElementById('programBtn');
+  const backBtn = document.getElementById('backToInvitationBtn');
+
+  // Ouvrir l'enveloppe
+  function openInvitation() {
+    const audio = document.getElementById('wedding-audio');
+    if (audio) {
+      audio.volume = 0.5;
+      audio.play().catch(e => console.log("Erreur audio : ", e));
+    }
+    envelope.style.transition = 'opacity 0.4s, transform 0.4s';
+    envelope.style.opacity = '0';
+    envelope.style.transform = 'scale(0.8)';
+    setTimeout(() => {
+      envelope.style.display = 'none';
+      invitation.classList.remove('hidden');
+      invitation.style.animation = 'fadeInUp 0.7s';
+    }, 350);
+  }
+
+  envelope.addEventListener('click', openInvitation);
+  openBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    openInvitation();
+  });
+
+  // Animation
+  const styleAnim = document.createElement('style');
+  styleAnim.textContent = `@keyframes fadeInUp{0%{opacity:0;transform:translateY(25px)}100%{opacity:1;transform:translateY(0)}}`;
+  document.head.appendChild(styleAnim);
+
+  // Programme
+  programBtn.addEventListener('click', function() {
+    invitation.classList.add('hidden');
+    program.classList.remove('hidden');
+    program.style.animation = 'fadeInUp 0.7s';
+  });
+
+  // Retour
+  backBtn.addEventListener('click', function() {
+    program.classList.add('hidden');
+    invitation.classList.remove('hidden');
+    invitation.style.animation = 'fadeInUp 0.7s';
+  });
+
+// WhatsApp - version avec api.whatsapp.com (plus fiable)
+const confirmBtn = document.getElementById('confirmBtn');
+if (confirmBtn) {
+  // Supprimer les anciens gestionnaires en clonant
+  const newBtn = confirmBtn.cloneNode(true);
+  confirmBtn.parentNode.replaceChild(newBtn, confirmBtn);
+
+  newBtn.addEventListener('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    const phone = '237698699599'; // Votre numéro (indicatif + numéro sans +)
+    const msg = encodeURIComponent("Bonjour Me MFOPOU, je confirme avec joie ma présence à votre mariage avec Mme RABIYA les 21 et 22 mars 2026 à Bangambi-Foumban. 🎉");
+    const url = `https://api.whatsapp.com/send?phone=${phone}&text=${msg}`;
+    window.location.href = url;
+    // Effet visuel
+    this.style.backgroundColor = '#1da85c';
+    setTimeout(() => this.style.backgroundColor = '#25D366', 200);
+  });
+}
+})();
+</script>
+</body>
+</html>
